@@ -9,13 +9,14 @@ const TextEditor = () => {
         extensions: [StarterKit,
             Placeholder.configure({
                 placeholder: 'start taking notes here …',
-            })
+            }),
         ],
         editorProps: {
             attributes: {
                 class: "focus:outline-none h-screen p-5 "
             }
-        }
+        },
+        immediatelyRender: false, // Prevent hydration mismatches
     })
     return (
         <div>

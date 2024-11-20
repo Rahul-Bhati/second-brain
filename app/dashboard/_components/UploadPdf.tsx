@@ -64,7 +64,7 @@ const UploadPdf = ({ children }: { children: React.ReactNode }) => {
 
         // API call to get pdf process data
         const response = await axios.get("/api/pdf-loader?pdfUrl=" + fileUrl);
-        console.log(response.data.result);
+        // console.log(response.data.result);
 
         // emedding call
         await embededDoc({

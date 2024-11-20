@@ -16,7 +16,7 @@ const page = () => {
     });
 
     useEffect(() => {
-        console.log(fileInfo)
+        console.log(fileInfo, fileId)
     }, [fileInfo])
 
     return (
@@ -25,7 +25,7 @@ const page = () => {
             <div className='grid grid-cols-2 gap-5'>
                 <div>
                     {/* text editor */}
-                    <TextEditor fileId={fileId} />
+                    <TextEditor />
                 </div>
 
                 <div>

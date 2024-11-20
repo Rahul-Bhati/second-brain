@@ -23,7 +23,7 @@ const EditorExtension = ({ editor }) => {
 
         console.log("unformatterd data", result);
     }
-    return editor && (
+    return fileId && editor && (
         <div className='p-5 '>
             <div className="button-group flex gap-4">
                 <button

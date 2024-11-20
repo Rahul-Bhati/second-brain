@@ -24,14 +24,18 @@ export async function GET(req) {
         chunkSize: 100,
         chunkOverlap: 20,
     });
-    const texts = await textSplitter.splitText(pdfContent);
 
-    // const output = await textSplitter.createDocuments([pdfContent]);
+    // first type mention on site 
+    // const texts = await textSplitter.splitText(pdfContent);
 
-    // let splitContent = [];
-    // output.forEach(content => splitContent.push(content.pageContent));
+    // second type mention in video
+    const output = await textSplitter.createDocuments([pdfContent]);
+
+    let splitContent = [];
+    output.forEach(content => splitContent.push(content.pageContent));
+
 
     return NextResponse.json({
-        result: texts
+        result: splitContent
     })
 }
