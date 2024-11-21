@@ -72,7 +72,7 @@ const UploadPdf = ({ children }: { children: React.ReactNode }) => {
         });
 
 
-        // if (res === "Inserted") toast("pdf uploaded!")
+        if (res === "Inserted") toast("pdf uploaded!")
         // console.log(embededResult);
 
         setLoading(false);
