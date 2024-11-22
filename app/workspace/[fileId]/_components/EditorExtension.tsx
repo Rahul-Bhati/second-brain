@@ -20,8 +20,10 @@ type EditorType = {
         setContent: (content: string) => void;
     };
     chain: () => {
-        focus: () => { toggleBold: () => { run: () => void } };
-        toggleItalic: () => { run: () => void };
+        focus: () => {
+            toggleBold: () => { run: () => void };
+            toggleItalic: () => { run: () => void };
+        };
     };
     isActive: (command: string) => boolean;
 };
