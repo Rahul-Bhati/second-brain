@@ -17,11 +17,15 @@ import axios from "axios"
 import { useAction, useMutation } from "convex/react"
 import { Loader2Icon, Send } from "lucide-react"
 import Image from "next/image"
-import { useState } from "react"
+import { useState, ReactNode } from "react"
 import { toast } from "sonner"
 
 
-const AddTweet = () => {
+interface AddTweetProps {
+    children: ReactNode; // Define children prop to accept React nodes
+}
+
+const AddTweet: React.FC<AddTweetProps> = ({ children }) => {
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
     const [input, setInput] = useState("");
