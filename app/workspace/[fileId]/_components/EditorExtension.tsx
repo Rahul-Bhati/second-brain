@@ -23,6 +23,7 @@ type EditorType = {
         focus: () => { toggleBold: () => { run: () => void } };
         toggleItalic: () => { run: () => void };
     };
+    isActive: (command: string) => boolean;
 };
 interface EditorExtensionProps {
     editor: EditorType;
