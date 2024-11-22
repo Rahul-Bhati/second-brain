@@ -2,14 +2,13 @@
 
 import { useParams } from 'next/navigation'
 import React, { useEffect } from 'react'
-import WorkspaceHeader from './_components/WorkspaceHeader';
 import Header from '@/app/_components/Header';
 import { useQuery } from 'convex/react';
 import { api } from '@/convex/_generated/api';
 import PdfViewer from './_components/PdfViewer';
 import TextEditor from './_components/TextEditor';
 
-const page = () => {
+const Page = () => {
     const { fileId } = useParams<{ fileId: string }>();
     const fileInfo = useQuery(api.fileStorage.getFileRecord, {
         fileId: fileId
@@ -37,4 +36,4 @@ const page = () => {
     )
 }
 
-export default page
+export default Page
