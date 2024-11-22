@@ -52,12 +52,19 @@ const UploadPdf = () => {
         // console.log(storageId);
 
         const fileUrl = await getFileUrl({ storageId: storageId });
+        if (!fileUrl) throw new Error("Failed to get file URL");
 
         // Step 3: Save the newly allocated storage id to the database
 
         const fileId = uuid4();
 
-        const res = await insertFileToDb({ fileId: fileId, storageId: storageId, fileName: fileName || 'untitled file', fileUrl: fileUrl, createdBy: user?.primaryEmailAddress?.emailAddress || 'unknown' });
+        const res = await insertFileToDb({
+            fileId: fileId,
+            storageId: storageId,
+            fileName: fileName || 'untitled file',
+            fileUrl: fileUrl,
+            createdBy: user?.primaryEmailAddress?.emailAddress || 'unknown'
+        });
 
         // console.log(res)
 
