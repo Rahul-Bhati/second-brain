@@ -29,7 +29,7 @@ const Page = () => {
 
                 <div>
                     {/* preview pdf */}
-                    <PdfViewer fileUrl={fileInfo?.fileUrl} />
+                    {fileInfo?.fileUrl && <PdfViewer fileUrl={fileInfo.fileUrl} />}
                 </div>
             </div>
         </div>
