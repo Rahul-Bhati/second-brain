@@ -20,10 +20,9 @@ const TextEditor = () => {
     })
     return (
         <div>
-            <EditorExtension editor={editor} />
+            {editor && <EditorExtension editor={editor} />}
             <div>
-
-                <EditorContent editor={editor} />
+                {editor && <EditorContent editor={editor} />}
             </div>
         </div>
     )
