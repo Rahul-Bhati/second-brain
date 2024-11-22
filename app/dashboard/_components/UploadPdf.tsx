@@ -72,11 +72,19 @@ const UploadPdf = () => {
         const response = await axios.get("/api/pdf-loader?pdfUrl=" + fileUrl);
         // console.log(response.data.result);
 
+        const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY;
+
+        if (!apiKey) {
+            throw new Error("API key is not defined. Please set NEXT_PUBLIC_GOOGLE_API_KEY in your environment variables.");
+        }
+
         // emedding call
         await embededDoc({
-            splitText: response.data.result, fileId: fileId, contentType: "document", apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+            splitText: response.data.result,
+            fileId: fileId,
+            contentType: "document",
+            apiKey: apiKey // This will always be a string
         });
-
 
         if (res === "Inserted") toast("pdf uploaded!")
         // console.log(embededResult);
