@@ -18,4 +18,8 @@ export default defineSchema({
         vectorField: "embedding",
         dimensions: 768,
     }),
+
+    tweetTable: defineTable({
+        tweetId: v.string(), text: v.string(), userName: v.string(), screen_name: v.string(), profileUrl: v.string(), createdBy: v.string()
+    }),
 })

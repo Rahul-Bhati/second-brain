@@ -1,12 +1,24 @@
 "use client"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Send } from 'lucide-react'
-import React, { useRef } from 'react'
+import { Loader2Icon, Send } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios';
+import TweetDisplay from './_components/tweet-display'
+import { useAction, useMutation } from 'convex/react'
+import { api } from '@/convex/_generated/api'
+import { useUser } from '@clerk/nextjs'
+import { toast } from 'sonner'
+import { chatSession } from '@/config/AiModel'
+import RenderHTML from './_components/RenderHTML'
 
 const page = () => {
-    let url = useRef();
+    const { user } = useUser();
+    const [loading, setLoading] = useState(false);
+    const [search, setSearch] = useState("");
+    const [htmlContent, setHtmlContent] = useState("");
+
+    const SearchAI = useAction(api.myAction.randomSearch);
 
     let tweet = {
         "lang": "en",
@@ -268,31 +280,28 @@ const page = () => {
         "details": "successfully retrieved the tweet."
     }
 
-    const sendTweet = async () => {
-        const link = url.current.value;
-        // console.log(link)
-        const match = link.match(/status\/(\d+)/);
-        const tweetId = match ? match[1] : null;
+    const searchTweet = async () => {
+        setLoading(true);
+        const res = await SearchAI({
+            query: search, apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+        });
+        // console.log(res);
 
-        // console.log(match, tweetId)
-        const options = {
-            method: 'GET',
-            url: 'https://freetweet.p.rapidapi.com/',
-            params: {
-                tweet_id: tweetId
-            },
-            headers: {
-                'x-rapidapi-key': '06629e8cb3mshf12a4725a0e86a1p1c988cjsnc87605fdc959',
-                'x-rapidapi-host': 'freetweet.p.rapidapi.com'
-            }
-        };
+        const UnformateData = JSON.parse(res);
 
-        try {
-            const response = await axios.request(options);
-            console.log(response.data);
-        } catch (error) {
-            console.error(error);
-        }
+        let UnformateAns = "";
+        UnformateData && UnformateData.forEach(element => UnformateAns += element.pageContent);
+
+        const prompt = "you are a LLMs model i use to get data from the vector database and do not give any suggestion or notes or also do not repeat and also give the answer in beutiful ui format if there is any url make sure they will open in new tab also give the original tweet url, For question : " + search + " and with the given content as answer, please give appropriate answer in text. The answer content is : " + UnformateAns;
+
+        const AiModelResult = await chatSession.sendMessage(prompt);
+        const FinalAns = AiModelResult.response.text().replaceAll('```html', '').replaceAll('```', '');
+
+        // console.log(FinalAns)
+
+        setHtmlContent(FinalAns);
+
+        setLoading(false);
     }
     return (
         <div >
@@ -300,16 +309,27 @@ const page = () => {
 
                 <div className='flex mt-5 justify-center items-center gap-4'>
                     <Input
-                        ref={url}
-                        placeholder="paste your tweet link here..."
-                        className="w-[80%]  py-6 text-lg bg-white rounded-full shadow-sm"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        placeholder="search here..."
+                        className="w-[80%]  py-6 text-lg bg-white brounded-full shadow-sm"
                     />
-                    <Button className=" bg-purple-700 hover:bg-purple-800 text-white right-0 top-1/2" onClick={sendTweet}>
-                        <Send />
+                    <Button className=" bg-purple-700 hover:bg-purple-800 text-white right-0 top-1/2" onClick={searchTweet} disabled={loading}>
+                        {loading ? <Loader2Icon className="animate-spin" /> : <Send />}
+
                     </Button>
                 </div>
             </div>
-            <div></div>
+            {htmlContent ?
+                <div className="flex justify-center p-6">
+                    <RenderHTML htmlContent={htmlContent} />
+                </div>
+                : (
+                    <div>
+                        {user ? <TweetDisplay email={user?.primaryEmailAddress?.emailAddress} /> : "user is not login"}
+                    </div>
+
+                )}
         </div>
     )
 }

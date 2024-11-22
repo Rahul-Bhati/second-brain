@@ -34,10 +34,10 @@ const EditorExtension = ({ editor }) => {
         const AllText = editor.getHTML();
         editor.commands.setContent(AllText + "<p><strong>Answer: </strong>" + FinalAns + "</p>");
 
-        console.log("unformatterd data", UnformateData);
-        console.log("unformatterd ans", UnformateAns);
-        console.log("Prompt", prompt);
-        console.log("AiModelResult", AiModelResult.response.text());
+        // console.log("unformatterd data", UnformateData);
+        // console.log("unformatterd ans", UnformateAns);
+        // console.log("Prompt", prompt);
+        // console.log("AiModelResult", AiModelResult.response.text());
     }
     return fileId && editor && (
         <div className='p-5 '>
