@@ -12,7 +12,7 @@ const Sidebar = () => {
         <div className='shadow-md h-screen p-7'>
             <Image src={"/logo.svg"} width={150} height={100} alt='logo' />
             <div className='mt-10'>
-                <UploadPdf >
+                {/* <UploadPdf >
                     <Button className='w-full'><Plus /> Upload PDF</Button>
                 </UploadPdf>
 
@@ -20,9 +20,9 @@ const Sidebar = () => {
 
                     <Layout /> <h2>Workspace</h2>
 
-                </div>
+                </div> */}
 
-                <div className='flex gap-3 p-3 mt-5 hover:bg-slate-100 rounded-lg cursor-pointer'>
+                <div className='flex gap-3 px-3 mt-2 hover:bg-slate-100 rounded-lg cursor-pointer'>
                     {/* <Link className='flex  gap-3 items-center ' href={"/search"}> */}
                     <AddTweet >
 

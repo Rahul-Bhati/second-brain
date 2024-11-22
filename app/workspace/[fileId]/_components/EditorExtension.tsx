@@ -16,7 +16,7 @@ const EditorExtension = ({ editor }) => {
             ' '
         );
 
-        console.log("selectedText", selectedText);
+        // console.log("selectedText", selectedText);
 
         const result = await SearchAI({
             query: selectedText, fileId: fileId, apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY

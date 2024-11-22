@@ -68,7 +68,7 @@ const UploadPdf = ({ children }: { children: React.ReactNode }) => {
 
         // emedding call
         await embededDoc({
-            splitText: response.data.result, fileId: fileId, apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+            splitText: response.data.result, fileId: fileId, contentType: "document", apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
         });
 
 
