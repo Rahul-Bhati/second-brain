@@ -6,8 +6,12 @@ import { Bold, Italic, Sparkles } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import React from 'react'
 
-const EditorExtension = ({ editor }) => {
-    const { fileId } = useParams();
+interface EditorExtensionProps {
+    editor: any;
+}
+
+const EditorExtension: React.FC<EditorExtensionProps> = ({ editor }) => {
+    const { fileId } = useParams<{ fileId: string }>();
     const SearchAI = useAction(api.myAction.search);
     const onAiText = async () => {
         const selectedText = editor.state.doc.textBetween(
@@ -17,16 +21,26 @@ const EditorExtension = ({ editor }) => {
         );
 
         // console.log("selectedText", selectedText);
-
+        if (!selectedText || !fileId || !process.env.NEXT_PUBLIC_GOOGLE_API_KEY) {
+            console.error("Missing required parameters for SearchAI call.");
+            return;
+        }
         const result = await SearchAI({
-            query: selectedText, fileId: fileId, apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+            query: typeof selectedText === 'string' ? selectedText : selectedText.join(' '),
+            fileId: fileId,
+            apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
         });
+
+        if (!result) {
+            console.error("SearchAI call returned null or undefined.");
+            return;
+        }
 
         const UnformateData = JSON.parse(result);
         let UnformateAns = "";
-        UnformateData && UnformateData.forEach(element => UnformateAns += element.pageContent);
+        UnformateData && UnformateData.forEach((element: { pageContent: string }) => UnformateAns += element.pageContent);
 
-        const prompt = "For question : " + selectedText + " and with the given content as answer, please give appropriate answer in HTML format. The answer content is : " + UnformateAns;
+        const prompt = `For question : ${selectedText} and with the given content as answer, please give appropriate answer in HTML format. The answer content is : ${UnformateAns}`;
 
         const AiModelResult = await chatSession.sendMessage(prompt);
         const FinalAns = AiModelResult.response.text().replaceAll('```html', '').replaceAll('```', '');

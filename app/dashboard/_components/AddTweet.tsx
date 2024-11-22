@@ -21,11 +21,10 @@ import { useState } from "react"
 import { toast } from "sonner"
 
 
-const AddTweet = ({ children }: { children: React.ReactNode }) => {
+const AddTweet = () => {
     const { user } = useUser();
     const [loading, setLoading] = useState(false);
     const [input, setInput] = useState("");
-    const [search, setSearch] = useState("");
     const [open, setOpen] = useState(false);
 
     const insertTweetToDb = useMutation(api.tweetStore.AddTweetToDB);
@@ -54,11 +53,11 @@ const AddTweet = ({ children }: { children: React.ReactNode }) => {
             const response = await axios.request(options);
             const tweet = response.data;
 
-            const res = await insertTweetToDb({ tweetId: tweet.id_str, text: tweet.text, userName: tweet.user.name, screen_name: tweet.user.screen_name, profileUrl: tweet.user.profile_image_url_https, createdBy: user?.primaryEmailAddress?.emailAddress || 'unknown' });
+            await insertTweetToDb({ tweetId: tweet.id_str, text: tweet.text, userName: tweet.user.name, screen_name: tweet.user.screen_name, profileUrl: tweet.user.profile_image_url_https, createdBy: user?.primaryEmailAddress?.emailAddress || 'unknown' });
 
             // emedding call
             await embededDoc({
-                splitText: [tweet.text], fileId: tweet.id_str, contentType: "tweet", apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+                splitText: [tweet.text], fileId: tweet.id_str, contentType: "tweet", apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY || ''
             });
 
             // console.log(res);

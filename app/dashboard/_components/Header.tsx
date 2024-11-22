@@ -1,7 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { UserButton, useUser } from "@clerk/nextjs";
-import Image from "next/image"
 import Link from "next/link";
 
 const Header = () => {

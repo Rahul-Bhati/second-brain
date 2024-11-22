@@ -14,7 +14,7 @@ export default function TweetDisplay({ email }: { email: string }) {
   return (
     <div className="flex flex-wrap justify-evenly mx-4 my-10">
       {getAllTweet && getAllTweet.map((tweet) => (
-        <TweetCard key={tweet._id} tweet={tweet} />
+        <TweetCard key={tweet._id} tweet={{ ...tweet, _creationTime: tweet._creationTime.toString() }} />
       ))}
     </div>
   )

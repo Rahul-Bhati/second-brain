@@ -282,17 +282,17 @@ const page = () => {
 
     const searchTweet = async () => {
         setLoading(true);
+        const apiKey = process.env.NEXT_PUBLIC_GOOGLE_API_KEY as string; // Assuming NEXT_PUBLIC_GOOGLE_API_KEY is defined and not null
         const res = await SearchAI({
-            query: search, apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
+            query: search, apiKey: apiKey
         });
         // console.log(res);
 
-        const UnformateData = JSON.parse(res);
-
+        const UnformateData = JSON.parse(res || ''); // Providing a default empty string if res is null
         let UnformateAns = "";
-        UnformateData && UnformateData.forEach(element => UnformateAns += element.pageContent);
+        UnformateData?.forEach((element: { pageContent: string }) => UnformateAns += element.pageContent);
 
-        const prompt = "you are a LLMs model i use to get data from the vector database and do not give any suggestion or notes or also do not repeat and also give the answer in beutiful ui format if there is any url make sure they will open in new tab also give the original tweet url, For question : " + search + " and with the given content as answer, please give appropriate answer in text. The answer content is : " + UnformateAns;
+        const prompt = `you are a LLMs model i use to get data from the vector database and do not give any suggestion or notes or also do not repeat and also give the answer in beutiful ui format if there is any url make sure they will open in new tab also give the original tweet url, For question : ${search} and with the given content as answer, please give appropriate answer in text. The answer content is : ${UnformateAns}`;
 
         const AiModelResult = await chatSession.sendMessage(prompt);
         const FinalAns = AiModelResult.response.text().replaceAll('```html', '').replaceAll('```', '');
@@ -326,7 +326,7 @@ const page = () => {
                 </div>
                 : (
                     <div>
-                        {user ? <TweetDisplay email={user?.primaryEmailAddress?.emailAddress} /> : "user is not login"}
+                        {user?.primaryEmailAddress?.emailAddress ? <TweetDisplay email={user.primaryEmailAddress.emailAddress} /> : "user is not login"}
                     </div>
 
                 )}

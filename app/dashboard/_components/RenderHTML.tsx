@@ -1,6 +1,10 @@
 import React from "react";
 
-const RenderHTML = ({ htmlContent }) => {
+interface RenderHTMLProps {
+    htmlContent: string;
+}
+
+const RenderHTML: React.FC<RenderHTMLProps> = ({ htmlContent }) => {
     return (
         <div
             dangerouslySetInnerHTML={{ __html: htmlContent }}
