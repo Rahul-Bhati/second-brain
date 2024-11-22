@@ -26,27 +26,42 @@ const EditorExtension: React.FC<EditorExtensionProps> = ({ editor }) => {
             return;
         }
         const result = await SearchAI({
-            query: typeof selectedText === 'string' ? selectedText : selectedText.join(' '),
+            query: Array.isArray(selectedText) ? selectedText.join(' ') : selectedText,
             fileId: fileId,
             apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
         });
 
-        if (!result) {
-            console.error("SearchAI call returned null or undefined.");
-            return;
+        // Ensure that result is handled properly
+        if (result) {
+            const UnformateData = JSON.parse(result);
+            let UnformateAns = "";
+            UnformateData?.forEach((element: { pageContent: string }) => UnformateAns += element.pageContent);
+
+            const prompt = `For question : ${selectedText} and with the given content as answer, please give appropriate answer in HTML format. The answer content is : ${UnformateAns}`;
+
+            const AiModelResult = await chatSession.sendMessage(prompt);
+            const FinalAns = AiModelResult.response.text().replaceAll('```html', '').replaceAll('```', '');
+
+            const AllText = editor.getHTML();
+            editor.commands.setContent(AllText + "<p><strong>Answer: </strong>" + FinalAns + "</p>");
         }
 
-        const UnformateData = JSON.parse(result);
-        let UnformateAns = "";
-        UnformateData && UnformateData.forEach((element: { pageContent: string }) => UnformateAns += element.pageContent);
+        // if (!result) {
+        //     console.error("SearchAI call returned null or undefined.");
+        //     return;
+        // }
 
-        const prompt = `For question : ${selectedText} and with the given content as answer, please give appropriate answer in HTML format. The answer content is : ${UnformateAns}`;
+        // const UnformateData = JSON.parse(result);
+        // let UnformateAns = "";
+        // UnformateData && UnformateData.forEach((element: { pageContent: string }) => UnformateAns += element.pageContent);
 
-        const AiModelResult = await chatSession.sendMessage(prompt);
-        const FinalAns = AiModelResult.response.text().replaceAll('```html', '').replaceAll('```', '');
+        // const prompt = `For question : ${selectedText} and with the given content as answer, please give appropriate answer in HTML format. The answer content is : ${UnformateAns}`;
 
-        const AllText = editor.getHTML();
-        editor.commands.setContent(AllText + "<p><strong>Answer: </strong>" + FinalAns + "</p>");
+        // const AiModelResult = await chatSession.sendMessage(prompt);
+        // const FinalAns = AiModelResult.response.text().replaceAll('```html', '').replaceAll('```', '');
+
+        // const AllText = editor.getHTML();
+        // editor.commands.setContent(AllText + "<p><strong>Answer: </strong>" + FinalAns + "</p>");
 
         // console.log("unformatterd data", UnformateData);
         // console.log("unformatterd ans", UnformateAns);

@@ -10,13 +10,13 @@ import PdfViewer from './_components/PdfViewer';
 import TextEditor from './_components/TextEditor';
 
 const page = () => {
-    const { fileId } = useParams();
+    const { fileId } = useParams<{ fileId: string }>();
     const fileInfo = useQuery(api.fileStorage.getFileRecord, {
         fileId: fileId
     });
 
     useEffect(() => {
-        console.log(fileInfo, fileId)
+        // console.log(fileInfo, fileId)
     }, [fileInfo])
 
     return (
