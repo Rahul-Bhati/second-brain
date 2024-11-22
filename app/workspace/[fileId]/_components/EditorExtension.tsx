@@ -5,9 +5,27 @@ import { useAction } from 'convex/react'
 import { Bold, Italic, Sparkles } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import React from 'react'
-
+type EditorType = {
+    state: {
+        doc: {
+            textBetween: (from: number, to: number, join: string) => string;
+        };
+        selection: {
+            from: number;
+            to: number;
+        };
+    };
+    getHTML: () => string;
+    commands: {
+        setContent: (content: string) => void;
+    };
+    chain: () => {
+        focus: () => { toggleBold: () => { run: () => void } };
+        toggleItalic: () => { run: () => void };
+    };
+};
 interface EditorExtensionProps {
-    editor: any;
+    editor: EditorType;
 }
 
 const EditorExtension: React.FC<EditorExtensionProps> = ({ editor }) => {
