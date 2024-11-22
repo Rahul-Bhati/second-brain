@@ -12,7 +12,6 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { api } from "@/convex/_generated/api"
-import { generateUploadUrl } from "@/convex/fileStorage"
 import { useUser } from "@clerk/nextjs"
 import { useAction, useMutation } from "convex/react"
 import { Loader2Icon } from "lucide-react"
@@ -22,7 +21,7 @@ import { toast } from "sonner";
 import axios from "axios";
 
 
-const UploadPdf = ({ children }: { children: React.ReactNode }) => {
+const UploadPdf = () => {
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [fileName, setFileName] = useState<string>('');
