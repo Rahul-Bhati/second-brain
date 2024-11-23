@@ -35,22 +35,7 @@ export default function TweetCard({ tweet }: TweetCardProps) {
       </Link>
       <CardContent className="px-4">
         <p className="text-sm">{tweet.text}</p>
-        {/* {tweet.photos && tweet.photos.length > 0 && (
-          <div className="mt-4">
-            <Image
-              src={tweet.photos[0].url}
-              alt="Tweet image"
-              width={tweet.photos[0].width}
-              height={tweet.photos[0].height}
-              className="rounded-lg"
-            />
-          </div>
-        )} */}
       </CardContent>
-      {/* <CardFooter className="flex justify-between p-4 text-sm text-gray-500">
-        <span>{new Date(tweet.created_at).toLocaleDateString()}</span>
-        <span>{tweet.favorite_count} likes</span>
-      </CardFooter> */}
 
     </Card>
   )

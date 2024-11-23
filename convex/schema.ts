@@ -22,4 +22,8 @@ export default defineSchema({
     tweetTable: defineTable({
         tweetId: v.string(), text: v.string(), userName: v.string(), screen_name: v.string(), profileUrl: v.string(), createdBy: v.string()
     }),
+
+    notes: defineTable({
+        fileId: v.string(), notes: v.any(), createdBy: v.string()
+    })
 })

@@ -1,7 +1,6 @@
 import React from 'react'
 import Sidebar from './_components/Sidebar'
 import Header from './_components/Header'
-import { Toaster } from 'sonner'
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -11,7 +10,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 <Header />
                 <div>
                     {children}
-                    <Toaster />
+
                 </div>
             </div>
         </div>

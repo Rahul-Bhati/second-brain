@@ -1,10 +1,13 @@
 "use client"
+import { Button } from '@/components/ui/button'
 import { chatSession } from '@/config/AiModel'
 import { api } from '@/convex/_generated/api'
-import { useAction } from 'convex/react'
+import { useUser } from '@clerk/nextjs'
+import { useAction, useMutation } from 'convex/react'
 import { Bold, Italic, Sparkles } from 'lucide-react'
 import { useParams } from 'next/navigation'
 import React from 'react'
+import { toast } from 'sonner'
 type EditorType = {
     state: {
         doc: {
@@ -34,7 +37,20 @@ interface EditorExtensionProps {
 const EditorExtension: React.FC<EditorExtensionProps> = ({ editor }) => {
     const { fileId } = useParams<{ fileId: string }>();
     const SearchAI = useAction(api.myAction.search);
+    const saveNote = useMutation(api.notes.AddNotes);
+    const { user } = useUser();
+
+    const saveNotes = () => {
+        if (user?.primaryEmailAddress?.emailAddress) {
+            saveNote({
+                notes: editor.getHTML(), fileId: fileId, createdBy: user.primaryEmailAddress.emailAddress
+            });
+        }
+
+        toast("notes saved!")
+    }
     const onAiText = async () => {
+        toast("AI is getting your answer...")
         const selectedText = editor.state.doc.textBetween(
             editor.state.selection.from,
             editor.state.selection.to,
@@ -52,6 +68,8 @@ const EditorExtension: React.FC<EditorExtensionProps> = ({ editor }) => {
             apiKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY
         });
 
+        // console.log(result)
+
         // Ensure that result is handled properly
         if (result) {
             const UnformateData = JSON.parse(result);
@@ -65,29 +83,15 @@ const EditorExtension: React.FC<EditorExtensionProps> = ({ editor }) => {
 
             const AllText = editor.getHTML();
             editor.commands.setContent(AllText + "<p><strong>Answer: </strong>" + FinalAns + "</p>");
+
+            // console.log(AllText);
+
+            if (user?.primaryEmailAddress?.emailAddress) {
+                saveNote({
+                    notes: editor.getHTML(), fileId: fileId, createdBy: user.primaryEmailAddress.emailAddress
+                });
+            }
         }
-
-        // if (!result) {
-        //     console.error("SearchAI call returned null or undefined.");
-        //     return;
-        // }
-
-        // const UnformateData = JSON.parse(result);
-        // let UnformateAns = "";
-        // UnformateData && UnformateData.forEach((element: { pageContent: string }) => UnformateAns += element.pageContent);
-
-        // const prompt = `For question : ${selectedText} and with the given content as answer, please give appropriate answer in HTML format. The answer content is : ${UnformateAns}`;
-
-        // const AiModelResult = await chatSession.sendMessage(prompt);
-        // const FinalAns = AiModelResult.response.text().replaceAll('```html', '').replaceAll('```', '');
-
-        // const AllText = editor.getHTML();
-        // editor.commands.setContent(AllText + "<p><strong>Answer: </strong>" + FinalAns + "</p>");
-
-        // console.log("unformatterd data", UnformateData);
-        // console.log("unformatterd ans", UnformateAns);
-        // console.log("Prompt", prompt);
-        // console.log("AiModelResult", AiModelResult.response.text());
     }
     return fileId && editor && (
         <div className='p-5 '>
@@ -111,6 +115,8 @@ const EditorExtension: React.FC<EditorExtensionProps> = ({ editor }) => {
                 >
                     <Sparkles />
                 </button>
+
+                <Button className='ml-auto' onClick={saveNotes}>Save</Button>
             </div>
         </div>
     )

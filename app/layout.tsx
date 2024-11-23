@@ -3,6 +3,7 @@ import "./globals.css";
 import { Outfit } from "next/font/google"
 import { ConvexClientProvider } from "./ConvexClientProvider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from 'sonner'
 
 export const metadata: Metadata = {
   title: "Second Brain",
@@ -27,6 +28,7 @@ export default function RootLayout({
         >
           <ConvexClientProvider>
             {children}
+            <Toaster />
           </ConvexClientProvider>
         </body>
       </html>

@@ -16,6 +16,7 @@ import type {
 import type * as fileStorage from "../fileStorage.js";
 import type * as langchain_db from "../langchain/db.js";
 import type * as myAction from "../myAction.js";
+import type * as notes from "../notes.js";
 import type * as tweetStore from "../tweetStore.js";
 import type * as user from "../user.js";
 
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   fileStorage: typeof fileStorage;
   "langchain/db": typeof langchain_db;
   myAction: typeof myAction;
+  notes: typeof notes;
   tweetStore: typeof tweetStore;
   user: typeof user;
 }>;

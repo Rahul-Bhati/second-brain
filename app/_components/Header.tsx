@@ -25,7 +25,7 @@ const Header = () => {
             userName: user?.fullName || ""
         });
 
-        console.log(result)
+        // console.log(result)
     }
 
     return (

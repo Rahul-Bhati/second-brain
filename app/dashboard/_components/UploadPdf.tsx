@@ -15,13 +15,16 @@ import { api } from "@/convex/_generated/api"
 import { useUser } from "@clerk/nextjs"
 import { useAction, useMutation } from "convex/react"
 import { Loader2Icon } from "lucide-react"
-import { useState } from "react"
+import { ReactNode, useState } from "react"
 import uuid4 from "uuid4";
 import { toast } from "sonner";
 import axios from "axios";
 
+interface UploadPdfBtn {
+    children: ReactNode; // Define children prop to accept React nodes
+}
 
-const UploadPdf = () => {
+const UploadPdf: React.FC<UploadPdfBtn> = ({ children }) => {
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
     const [fileName, setFileName] = useState<string>('');
